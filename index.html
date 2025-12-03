@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -7,7 +7,9 @@
   <title>Counting Machine</title>
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/tutorial.css">
   <script src="assets/js/unityBridge.js"></script>
+  <script src="assets/js/tutorial.js"></script>
 </head>
 <body>
 <div>
@@ -30,6 +32,33 @@
 </div>
 <div id="unity-container" class="unity-desktop">
   <canvas id="unity-canvas"></canvas>
+</div>
+
+<!-- Tutorial UI -->
+<button id="tutorial-start-btn" onclick="Tutorial.start()">📖 Didacticiel</button>
+<button id="tutorial-quit-btn" onclick="Tutorial.quit()">✕ Quitter</button>
+
+<div id="tutorial-dialog">
+  <span id="tutorial-dialog-text"></span>
+</div>
+
+<div id="tutorial-column-labels">
+  <div class="column-label">
+    <span class="column-label-name">Millier</span>
+    <span class="column-label-value">×1000</span>
+  </div>
+  <div class="column-label">
+    <span class="column-label-name">Centaine</span>
+    <span class="column-label-value">×100</span>
+  </div>
+  <div class="column-label">
+    <span class="column-label-name">Dizaine</span>
+    <span class="column-label-value">×10</span>
+  </div>
+  <div class="column-label">
+    <span class="column-label-name">Unité</span>
+    <span class="column-label-value">×1</span>
+  </div>
 </div>
 <div id="loading-cover">
   <div id="logo" class="animate-flicker">

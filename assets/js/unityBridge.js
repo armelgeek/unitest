@@ -66,4 +66,24 @@ function LockUnitRoll(locked) {
 
 window.onUnityMessage = function(message) {
     console.log("[UnityBridge override] Message:", message);
+    
+    // Handle tutorial-related messages from Unity
+    if (typeof Tutorial !== 'undefined' && Tutorial.isActive()) {
+        // Handle up button click
+        if (message === 'UpClicked' || message === 'ButtonUp') {
+            Tutorial.onUpClick();
+        }
+        // Handle down button click
+        else if (message === 'DownClicked' || message === 'ButtonDown') {
+            Tutorial.onDownClick();
+        }
+        // Handle goal completed
+        else if (message === 'GoalCompleted' || message === 'Correct') {
+            Tutorial.onGoalCompleted();
+        }
+        // Handle validation
+        else if (message === 'Validated' || message === 'Validate') {
+            Tutorial.onValidate(true);
+        }
+    }
 };
