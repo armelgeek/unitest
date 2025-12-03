@@ -204,10 +204,10 @@ const Tutorial = (function() {
         // Show column labels
         showColumnLabels();
 
-        const msg1 = "Maintenant, regardons les différentes colonnes. Ici, tu peux voir : Unité, Dizaine, Centaine, Millième.";
+        const msg1 = "Maintenant, regardons les différentes colonnes. Ici, tu peux voir : Unité, Dizaine, Centaine, Millier.";
         showDialog(msg1);
         speak(msg1, function() {
-            const msg2 = "Je vais t'envoyer un nombre, et tu devras reproduire chaque chiffre dans la bonne colonne. On commence par l'Unité, puis la Dizaine, puis la Centaine, et enfin le Millième.";
+            const msg2 = "Je vais t'envoyer un nombre, et tu devras reproduire chaque chiffre dans la bonne colonne. On commence par l'Unité, puis la Dizaine, puis la Centaine, et enfin le Millier.";
             showDialog(msg2);
             speak(msg2, function() {
                 sendStage2Number();
