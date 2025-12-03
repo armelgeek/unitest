@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Counting Machine</title>
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/unityBridge.js"></script>
+</head>
+<body>
+<div>
+  <input type="text" id="currentValue" placeholder="9999">
+  <button onclick="ChangeCurrentValue()">Change Current Value</button>
+</div>
+<div>
+  <input type="text" id="currentGoalList" placeholder="9/999/9999/99">
+  <button onclick="ChangeCurrentGoalList()">Change Current Goal List</button>
+</div>
+<div>
+  <button onclick="LockThousandRoll(true)">Bloquer le rouleau des 1000</button>
+  <button onclick="LockThousandRoll(false)">Débloquer le rouleau des 1000</button>
+  <button onclick="LockHundredRoll(true)">Bloquer le rouleau des 100</button>
+  <button onclick="LockHundredRoll(false)">Débloquer le rouleau des 100</button>
+  <button onclick="LockTenRoll(true)">Bloquer le rouleau des 10</button>
+  <button onclick="LockTenRoll(false)">Débloquer le rouleau des 10</button>
+  <button onclick="LockUnitRoll(true)">Bloquer le rouleau des 1</button>
+  <button onclick="LockUnitRoll(false)">Débloquer le rouleau des 1</button>
+</div>
+<div id="unity-container" class="unity-desktop">
+  <canvas id="unity-canvas"></canvas>
+</div>
+<div id="loading-cover">
+  <div id="logo" class="animate-flicker">
+    <img src="assets/logo.webp" alt="logo">
+  </div>
+</div>
+<div id="loading-text"></div>
+<div id="unity-fullscreen-button" style="display: none;"></div>
+<script>
+  const hideFullScreenButton = "1";
+  const buildUrl = "Build";
+  const loaderUrl = buildUrl + "/counting-machine.loader.js";
+  const config = {
+    dataUrl: buildUrl + "/counting-machine.data.br",
+    frameworkUrl: buildUrl + "/counting-machine.framework.js.br",
+    codeUrl: buildUrl + "/counting-machine.wasm.br",
+    streamingAssetsUrl: "StreamingAssets",
+    companyName: "Mena Mena Games",
+    productName: "Counting Machine",
+    productVersion: "0.0.5",
+  };
+
+  const container = document.querySelector("#unity-container");
+  const canvas = document.querySelector("#unity-canvas");
+  const loadingCover = document.querySelector("#loading-cover");
+  const logo = document.querySelector("#logo");
+  const fullscreenButton = document.querySelector("#unity-fullscreen-button");
+  const loadingText = document.querySelector("#loading-text");
+
+  let currentPercent = 0;
+  let desiredPercent = 0;
+
+  const canFullscreen = (function() {
+    for (const key of [
+      'exitFullscreen',
+      'webkitExitFullscreen',
+      'webkitCancelFullScreen',
+      'mozCancelFullScreen',
+      'msExitFullscreen',
+    ]) {
+      if (key in document) {
+        return true;
+      }
+    }
+    return false;
+  }());
+
+  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+    container.className = "unity-mobile";
+    config.devicePixelRatio = 1;
+  }
+
+  loadingCover.className = "visible";
+  loadingText.className = "visible";
+
+  const script = document.createElement("script");
+  script.src = loaderUrl;
+  script.onload = () => {
+    createUnityInstance(canvas, config, (progress) => {
+      desiredPercent = Math.floor(progress * 100);
+      animateProgress();
+    }).then((unityInstance) => {
+      window.unityInstance = unityInstance;
+      
+      loadingCover.className = "hidden";
+      logo.style.display = "none";
+      if (canFullscreen) {
+        if (!hideFullScreenButton) {
+          fullscreenButton.style.display = "";
+        }
+        fullscreenButton.onclick = () => {
+          unityInstance.SetFullscreen(1);
+        };
+      }
+    }).catch(() => {
+    });
+  };
+
+  function animateProgress() {
+    if (currentPercent < desiredPercent) {
+      currentPercent++;
+      loadingText.textContent = `${currentPercent}%`;
+      setTimeout(() => {
+        requestAnimationFrame(animateProgress);
+      }, 100);
+    }
+
+    if (currentPercent === 100) {
+      loadingText.className = "hidden-faster";
+    }
+  }
+
+  document.body.appendChild(script);
+</script>
+</body>
+</html>
