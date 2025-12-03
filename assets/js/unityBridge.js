@@ -32,7 +32,7 @@ const UnityEvents = (function() {
                 try {
                     callback(data);
                 } catch (e) {
-                    console.error('[UnityEvents] Erreur dans le callback:', e);
+                    console.error('[UnityEvents] Callback error:', e);
                 }
             });
         },
@@ -174,7 +174,7 @@ const unityEventMap = {
 };
 
 window.onUnityMessage = function(message) {
-    console.log("[UnityBridge] Message reçu de Unity:", message);
+    console.log("[UnityBridge] Message received from Unity:", message);
     
     // Émettre l'événement brut pour les écouteurs génériques
     UnityEvents.emit('message', message);
@@ -184,7 +184,7 @@ window.onUnityMessage = function(message) {
     var eventData = null;
     
     // Gérer les messages avec des données (format: "Type:data" ou "Type:data1:data2")
-    if (message.indexOf(':') !== -1) {
+    if (message.includes(':')) {
         var parts = message.split(':');
         eventType = parts[0];
         eventData = parts.slice(1).join(':');

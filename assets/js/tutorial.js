@@ -131,6 +131,13 @@ const Tutorial = (function() {
         }
     }
 
+    // Helper function to safely call Unity notification functions
+    function notifyUnity(functionName, ...args) {
+        if (typeof window[functionName] === 'function') {
+            window[functionName](...args);
+        }
+    }
+
     // Stage 1: Découverte des boutons
     function startStage1() {
         state.stage = 1;
@@ -139,9 +146,7 @@ const Tutorial = (function() {
         state.downClicks = 0;
 
         // Notifier Unity du changement d'étape
-        if (typeof NotifyTutorialStageChange === 'function') {
-            NotifyTutorialStageChange(1);
-        }
+        notifyUnity('NotifyTutorialStageChange', 1);
 
         // Lock all rolls except unit
         lockAllExceptUnit();
@@ -152,9 +157,7 @@ const Tutorial = (function() {
         speak(msg1, function() {
             state.step = 1;
             // Notifier Unity du changement de step
-            if (typeof NotifyTutorialStepChange === 'function') {
-                NotifyTutorialStepChange(1, 1);
-            }
+            notifyUnity('NotifyTutorialStepChange', 1, 1);
             const msg2 = "Essaie d'appuyer sur le bouton Haut.";
             showDialog(msg2);
             speak(msg2);
@@ -174,9 +177,7 @@ const Tutorial = (function() {
         if (state.upClicks >= 3 && state.step < 2) {
             state.step = 2;
             // Notifier Unity du changement de step
-            if (typeof NotifyTutorialStepChange === 'function') {
-                NotifyTutorialStepChange(1, 2);
-            }
+            notifyUnity('NotifyTutorialStepChange', 1, 2);
             const msg = "Super ! Maintenant, appuie trois fois sur le bouton Bas.";
             showDialog(msg);
             speak(msg);
@@ -191,9 +192,7 @@ const Tutorial = (function() {
             if (state.downClicks >= 3 && state.step < 3) {
                 state.step = 3;
                 // Notifier Unity du changement de step
-                if (typeof NotifyTutorialStepChange === 'function') {
-                    NotifyTutorialStepChange(1, 3);
-                }
+                notifyUnity('NotifyTutorialStepChange', 1, 3);
                 const msg = "Bien joué ! Tu as compris comment modifier un chiffre. Quand tu es prêt, clique sur Valider pour passer à la suite.";
                 showDialog(msg);
                 speak(msg);
@@ -215,9 +214,7 @@ const Tutorial = (function() {
         state.goalsCompleted = 0;
 
         // Notifier Unity du changement d'étape
-        if (typeof NotifyTutorialStageChange === 'function') {
-            NotifyTutorialStageChange(2);
-        }
+        notifyUnity('NotifyTutorialStageChange', 2);
 
         // Unlock all rolls
         unlockAllRolls();
@@ -290,9 +287,7 @@ const Tutorial = (function() {
         state.step = 0;
 
         // Notifier Unity du changement d'étape
-        if (typeof NotifyTutorialStageChange === 'function') {
-            NotifyTutorialStageChange(3);
-        }
+        notifyUnity('NotifyTutorialStageChange', 3);
 
         showQuitButton();
 
@@ -334,9 +329,7 @@ const Tutorial = (function() {
             state.active = true;
             
             // Notifier Unity du démarrage du didacticiel
-            if (typeof NotifyTutorialStart === 'function') {
-                NotifyTutorialStart(1);
-            }
+            notifyUnity('NotifyTutorialStart', 1);
             
             startStage1();
         },
@@ -353,9 +346,7 @@ const Tutorial = (function() {
             unlockAllRolls();
             
             // Notifier Unity de l'arrêt du didacticiel
-            if (typeof NotifyTutorialQuit === 'function') {
-                NotifyTutorialQuit();
-            }
+            notifyUnity('NotifyTutorialQuit');
             
             window.speechSynthesis.cancel();
             
